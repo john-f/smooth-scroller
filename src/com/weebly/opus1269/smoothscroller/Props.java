@@ -50,7 +50,7 @@ public class Props {
         sProps.add(new Prop("SmoothScrollerThreshold", 0.0005F, 0.001F));
         sProps.add(new Prop("SmoothScrollerSpeedLmt", 25.0F, 100.0F));
         sProps.add(new Prop("SmoothScrollerAccLmt", 5.0F, 10.0F));
-        sProps.add(new Prop("SmoothScrollerFric", 0.005F, .015F));
+        sProps.add(new Prop("SmoothScrollerFric", 0.005F, .06F));
         sProps.add(new Prop("SmoothScrollerMult", 1.0F, 100.0F));
 
         // load the current values from the IDE
