@@ -38,7 +38,7 @@ import java.util.ArrayList;
 class SmoothScrollerMouseWheelListener implements MouseWheelListener, ActionListener {
     // The frame rate of the animation
     // TODO: Investigate if we can get an AnimationFrame
-    private static final int FRAMES_PER_SECOND = 20;
+    private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLIS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 
     // Scrolling model of the window
