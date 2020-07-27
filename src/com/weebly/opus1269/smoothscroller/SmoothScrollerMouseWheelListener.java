@@ -31,6 +31,7 @@ import com.intellij.openapi.fileEditor.TextEditor;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ class SmoothScrollerMouseWheelListener implements MouseWheelListener, ActionList
     // The current velocity of the window, usually in rows / mSec
     private double mVelocity = 0.0D;
 
+    // true when mouse wheel events are horizontal
+    private boolean mScrollingHorizontal = false;
+
     // A history of the last several scroll velocities
     private final ArrayList<Double> mVelocities = new ArrayList<Double>();
     private static final int MAX_VELOCITIES = 10;
@@ -75,6 +79,8 @@ class SmoothScrollerMouseWheelListener implements MouseWheelListener, ActionList
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+        mScrollingHorizontal = e.getModifiersEx() != 0;
+
         final double spdTol = Props.get(Props.TOL).VAL;
         final double spdLmt = Props.get(Props.SPD).VAL;
         final double accLmt = Props.get(Props.ACC).VAL;
@@ -171,9 +177,16 @@ class SmoothScrollerMouseWheelListener implements MouseWheelListener, ActionList
 
         if (Math.abs(mVelocity) >= spdTol) {
             // reposition cursor offset based on current velocity
-            final int currentOffset = mScrollingModel.getVerticalScrollOffset();
-            final long offset = Math.round((currentOffset + mVelocity * MILLIS_PER_FRAME));
-            mScrollingModel.scrollVertically(Math.max(0, (int) offset));
+            if (!mScrollingHorizontal) {
+               final int currentOffset = mScrollingModel.getVerticalScrollOffset();
+               final long offset = Math.round((currentOffset + mVelocity * MILLIS_PER_FRAME));
+               mScrollingModel.scrollVertically(Math.max(0, (int) offset));
+            } else {
+               final int currentOffset = mScrollingModel.getHorizontalScrollOffset();
+               final long offset = Math.round((currentOffset + mVelocity * MILLIS_PER_FRAME));
+               mScrollingModel.scrollHorizontally(Math.max(0, (int) offset));
+            }
+
         } else {
             // bring to stop below threshold
             zeroVelocity();
